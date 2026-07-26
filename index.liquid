@@ -1,0 +1,855 @@
+{% comment %}
+  Doer Tough - Premium Shopify Theme
+  Homepage template (index.liquid)
+  Optimized for sales and consistent brand messaging
+{% endcomment %}
+
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page_title }}{% if page_title != shop.name %} | {{ shop.name }}{% endif %}</title>
+  <meta name="description" content="Premium apparel for people who show up. Built for doers, grinders, and those who refuse to quit.">
+  
+  {{ content_for_header }}
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #1a1a1a;
+      --secondary: #d4af37;
+      --accent: #dc2626;
+      --light: #f5f5f5;
+      --text: #333;
+      --border: #e5e5e5;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: white;
+    }
+
+    /* HEADER & NAV */
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: var(--secondary);
+      text-decoration: none;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: 600;
+      transition: color 0.3s;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      color: var(--secondary);
+    }
+
+    .cart-link {
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      margin-left: 2rem;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .cart-link:hover {
+      color: var(--secondary);
+    }
+
+    /* HERO SECTION */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #2d2d2d 100%);
+      color: white;
+      padding: 6rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="600" fill="url(%23grid)"/></svg>');
+      opacity: 0.5;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: -1px;
+      line-height: 1.2;
+    }
+
+    .hero .highlight {
+      color: var(--secondary);
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      line-height: 1.6;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cta-button:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+    }
+
+    .cta-secondary {
+      background: transparent;
+      border: 2px solid var(--secondary);
+      color: var(--secondary);
+      margin-left: 1rem;
+    }
+
+    .cta-secondary:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+
+    /* FEATURED PRODUCTS */
+    .featured-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .section-header .accent-line {
+      width: 60px;
+      height: 4px;
+      background: var(--secondary);
+      margin: 1rem auto;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      border-color: var(--secondary);
+    }
+
+    .product-image {
+      background: var(--light);
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: white;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+      font-size: 0.85rem;
+      z-index: 10;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .product-description {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+
+    .add-to-cart {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+    }
+
+    .add-to-cart:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+
+    /* CREED SECTION */
+    .creed-section {
+      background: var(--primary);
+      color: white;
+      padding: 4rem 2rem;
+      margin: 3rem 0;
+    }
+
+    .creed-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .creed-section h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 2rem;
+      color: var(--secondary);
+    }
+
+    .creed-text {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .creed-points {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .creed-point {
+      text-align: left;
+    }
+
+    .creed-point-icon {
+      font-size: 2rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+
+    .creed-point h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* BRAND STORY */
+    .story-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .story-text h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .story-text p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .story-image {
+      background: var(--light);
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border-radius: 4px;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      background: var(--light);
+      padding: 4rem 2rem;
+      margin: 3rem 0;
+    }
+
+    .testimonials-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .testimonial-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 4px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .stars {
+      color: var(--secondary);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .testimonial-text {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+
+    .testimonial-role {
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    /* NEWSLETTER */
+    .newsletter-section {
+      background: linear-gradient(135deg, var(--primary) 0%, #2d2d2d 100%);
+      color: white;
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+    }
+
+    .newsletter-content {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .newsletter-content h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter-content p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .newsletter-form button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .newsletter-form button:hover {
+      background: #b91c1c;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--primary);
+      color: white;
+      padding: 3rem 2rem 1rem;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+      font-size: 1rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--secondary);
+    }
+
+    .footer-section a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .footer-section a:hover {
+      color: var(--secondary);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .social-icons a {
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      color: white;
+      margin-bottom: 0;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+      background: var(--secondary);
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 2rem;
+      text-align: center;
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header-container {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      nav {
+        order: 3;
+        width: 100%;
+        display: none;
+      }
+
+      nav.active {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      nav a {
+        margin-left: 0;
+      }
+
+      .hero {
+        padding: 3rem 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .cta-button, .cta-secondary {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      .cta-secondary {
+        margin-left: 0;
+      }
+
+      .story-section {
+        grid-template-columns: 1fr;
+      }
+
+      .story-image {
+        height: 300px;
+      }
+
+      .newsletter-form {
+        flex-direction: column;
+      }
+
+      .newsletter-form button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <a href="/" class="logo">{{ shop.name }}</a>
+      <nav>
+        {% for link in linklists.main-menu.links %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      </nav>
+      <a href="/cart" class="cart-link">🛒 {{ cart.item_count }}</a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Toughness is <span class="highlight">Built</span>, Not Born</h1>
+      <p>Premium apparel for the ones who show up. Built by doers, for doers—grinders, workers, and those who refuse to quit.</p>
+      <a href="/collections/all" class="cta-button">Shop Now</a>
+      <a href="#about" class="cta-secondary">Learn Our Story</a>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="featured-section" id="shop">
+    <div class="section-header">
+      <h2>Our Best Sellers</h2>
+      <div class="accent-line"></div>
+      <p>Hand-picked essentials designed for durability, comfort, and the mindset of a doer.</p>
+    </div>
+    
+    <div class="products-grid">
+      {% for product in collections.featured.products limit: 6 %}
+        <a href="{{ product.url }}" class="product-card">
+          <div class="product-image" {% if product.featured_image %}style="background-image: url('{{ product.featured_image | img_url: '500x500' }}')"{% endif %}>
+            {% if product.available == false %}
+              <div class="product-badge">Sold Out</div>
+            {% elsif product.compare_at_price > product.price %}
+              <div class="product-badge">Sale</div>
+            {% endif %}
+          </div>
+          <div class="product-info">
+            <div class="product-name">{{ product.title }}</div>
+            <div class="product-description">{{ product.description | strip_html | truncatewords: 15 }}</div>
+            <div class="product-price">
+              {% if product.compare_at_price > product.price %}
+                <span style="text-decoration: line-through; color: #999; font-size: 0.9rem;">{{ product.compare_at_price | money }}</span><br>
+              {% endif %}
+              {{ product.price | money }}
+            </div>
+            <button class="add-to-cart" onclick="addToCart('{{ product.variants.first.id }}')">
+              {% if product.available %}
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- CREED SECTION -->
+  <section class="creed-section" id="creed">
+    <div class="creed-content">
+      <h2>The Doer Tough Creed</h2>
+      <p class="creed-text">We are the ones who show up. We are the ones who refuse to quit. We are the ones who turn ideas into action.</p>
+      
+      <div class="creed-points">
+        <div class="creed-point">
+          <div class="creed-point-icon">⏰</div>
+          <h3>Show Up Early</h3>
+          <p>Success starts before the sun rises. We're here first, gone last, and we own every moment in between.</p>
+        </div>
+        <div class="creed-point">
+          <div class="creed-point-icon">💪</div>
+          <h3>Do the Work</h3>
+          <p>Talk is cheap. We let our actions speak louder than words. Every day is a chance to prove ourselves.</p>
+        </div>
+        <div class="creed-point">
+          <div class="creed-point-icon">🎯</div>
+          <h3>Never Quit</h3>
+          <p>Quitting is not an option. Obstacles are opportunities. We turn setbacks into comebacks.</p>
+        </div>
+        <div class="creed-point">
+          <div class="creed-point-icon">🤝</div>
+          <h3>Lift Others</h3>
+          <p>We rise by lifting. Success means nothing if we don't bring others up with us.</p>
+        </div>
+        <div class="creed-point">
+          <div class="creed-point-icon">🏆</div>
+          <h3>Own It All</h3>
+          <p>We take responsibility for our wins and losses. There are no excuses, only results.</p>
+        </div>
+        <div class="creed-point">
+          <div class="creed-point-icon">🔥</div>
+          <h3>Stay Hungry</h3>
+          <p>Comfort is the enemy of growth. We stay hungry, stay humble, and keep grinding.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND STORY -->
+  <section class="story-section" id="about">
+    <div class="story-text">
+      <h2>Our Story</h2>
+      <p>Doer Tough started with a simple idea: create apparel for people who actually work. Not casual wear. Not gym clothes. Real gear for real workers.</p>
+      <p>We're built for mechanics, tradespeople, entrepreneurs, single parents juggling multiple jobs, and anyone who knows that toughness is forged through action, not born into privilege.</p>
+      <p>Every product is designed with durability, comfort, and the mentality of someone who refuses to quit. Because that's who we are. And that's who you are.</p>
+      <a href="/collections/all" class="cta-button">Shop the Collection</a>
+    </div>
+    <div class="story-image">🏗️</div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="testimonials-container">
+      <div class="section-header">
+        <h2>What Doers Are Saying</h2>
+        <div class="accent-line"></div>
+      </div>
+      
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Finally found gear that gets it. These aren't just clothes—they're built for the grind. Wearing Doer Tough means I don't have to think about durability. I can focus on work."</p>
+          <div class="testimonial-author">Marcus R.</div>
+          <div class="testimonial-role">Construction Worker</div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"As someone working three jobs, I need clothing that works as hard as I do. Doer Tough delivers. The quality is insane and the message behind the brand keeps me motivated."</p>
+          <div class="testimonial-author">Sarah T.</div>
+          <div class="testimonial-role">Entrepreneur & Parent</div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"The Creed resonates with everything I believe in. It's refreshing to see a brand that actually stands for something real. I wear Doer Tough with pride."</p>
+          <div class="testimonial-author">James M.</div>
+          <div class="testimonial-role">Shop Owner</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section">
+    <div class="newsletter-content">
+      <h2>Stay in the Grind</h2>
+      <p>Get exclusive drops, early access to new collections, and daily motivation straight to your inbox.</p>
+      <form class="newsletter-form" action="/contact" method="POST">
+        <input type="email" name="contact[email]" placeholder="Enter your email" required>
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Shop</h3>
+        {% for collection in shop.collections limit: 4 %}
+          <a href="{{ collection.url }}">{{ collection.title }}</a>
+        {% endfor %}
+      </div>
+
+      <div class="footer-section">
+        <h3>About</h3>
+        <a href="/pages/about">Our Story</a>
+        <a href="#creed">The Creed</a>
+        <a href="/pages/contact">Contact</a>
+        <a href="/blogs/news">Blog</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>Support</h3>
+        <a href="/pages/contact">Contact Us</a>
+        <a href="/pages/faq">FAQ</a>
+        <a href="/pages/shipping">Shipping Info</a>
+        <a href="/pages/returns">Returns</a>
+      </div>
+
+      <div class="footer-section">
+        <h3>Legal</h3>
+        <a href="/policies/privacy-policy">Privacy Policy</a>
+        <a href="/policies/terms-of-service">Terms of Service</a>
+        <a href="/policies/refund-policy">Refund Policy</a>
+        <h3 style="margin-top: 1.5rem;">Follow Us</h3>
+        <div class="social-icons">
+          <a href="{{ shop.social_links.instagram }}" target="_blank">📱</a>
+          <a href="{{ shop.social_links.facebook }}" target="_blank">👥</a>
+          <a href="{{ shop.social_links.twitter }}" target="_blank">🐦</a>
+          <a href="{{ shop.social_links.youtube }}" target="_blank">▶️</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved. Built for those who show up.</p>
+    </div>
+  </footer>
+
+  <script>
+    function addToCart(variantId) {
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          items: [{
+            id: variantId,
+            quantity: 1
+          }]
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        window.location.href = '/cart';
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
