@@ -1,0 +1,321 @@
+{% comment %}
+  Doer Tough — Mike AI homepage section.
+  Theme: Edit code → sections → Create new file: dt-mike.liquid
+  Then Customize → Add section → Mike AI. Hide DealTough.
+{% endcomment %}
+
+{%- liquid
+  assign eyebrow = section.settings.eyebrow
+  assign heading = section.settings.heading
+  assign accent = section.settings.heading_accent
+  assign body = section.settings.body
+  assign cta_label = section.settings.cta_label | default: 'Talk to Mike'
+  assign cta_url = section.settings.cta_url | default: 'https://doertoughmikeai.com'
+  assign foot = section.settings.foot
+  assign show_orb = section.settings.show_orb
+  assign new_tab = section.settings.new_tab
+  assign bullets = section.blocks | where: 'type', 'bullet'
+  assign steps = section.blocks | where: 'type', 'step'
+-%}
+
+{%- if heading != blank or body != blank or cta_url != blank -%}
+<section class="dt-mike" id="dt-mike-{{ section.id }}" aria-labelledby="dt-mike-heading-{{ section.id }}">
+  <div class="dt-mike__inner">
+    <div class="dt-mike__copy">
+      {%- if eyebrow != blank -%}
+        <p class="dt-mike__eyebrow">{{ eyebrow | escape }}</p>
+      {%- endif -%}
+
+      {%- if heading != blank or accent != blank -%}
+        <h2 class="dt-mike__heading" id="dt-mike-heading-{{ section.id }}">
+          {{- heading | escape -}}
+          {%- if accent != blank -%}<span>{{ accent | escape }}</span>{%- endif -%}
+        </h2>
+      {%- endif -%}
+
+      {%- if body != blank -%}
+        <p class="dt-mike__body">{{ body | escape | newline_to_br }}</p>
+      {%- endif -%}
+
+      {%- if bullets.size > 0 -%}
+        <ul class="dt-mike__list">
+          {%- for block in bullets -%}
+            {%- if block.settings.text != blank -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if cta_url != blank and cta_label != blank -%}
+        <div class="dt-mike__actions">
+          <a class="dt-mike__cta" href="{{ cta_url }}"{% if new_tab %} target="_blank" rel="noopener"{% endif %}>
+            {{ cta_label | escape }}
+            <span class="dt-mike__arrow" aria-hidden="true">&rarr;</span>
+          </a>
+          {%- if foot != blank -%}
+            <p class="dt-mike__foot">{{ foot | escape }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <aside class="dt-mike__panel" aria-hidden="true">
+      {%- if show_orb -%}
+        <div class="dt-mike__orb" role="presentation">
+          <span class="dt-mike__d">D</span><span class="dt-mike__t">T</span>
+          <span class="dt-mike__mike">MIKE</span>
+        </div>
+      {%- endif -%}
+
+      {%- if steps.size > 0 -%}
+        <ol class="dt-mike__steps">
+          {%- for block in steps -%}
+            {%- if block.settings.title != blank or block.settings.text != blank -%}
+              <li {{ block.shopify_attributes }}>
+                {%- if block.settings.title != blank -%}<b>{{ block.settings.title | escape }}</b>{%- endif -%}
+                {%- if block.settings.text != blank -%}<span>{{ block.settings.text | escape }}</span>{%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ol>
+      {%- endif -%}
+    </aside>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+  #dt-mike-{{ section.id }}.dt-mike {
+    --mike-orange: #ff7611;
+    --mike-cyan: #27a9ff;
+    background: #191c21;
+    color: #fff;
+    padding: 64px 20px;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.9fr);
+    gap: 40px 56px;
+    align-items: center;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--mike-orange);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__heading {
+    margin: 0 0 14px;
+    font-size: clamp(28px, 4.4vw, 42px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -.02em;
+    font-weight: 800;
+    color: #fff;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__heading span { display: block; color: var(--mike-orange); }
+  #dt-mike-{{ section.id }} .dt-mike__body {
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255,255,255,.78);
+    max-width: 48ch;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__list {
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__list li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255,255,255,.86);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: .55em;
+    width: 10px;
+    height: 2px;
+    background: var(--mike-orange);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 14px 28px;
+    background: var(--mike-orange);
+    color: #14161a;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 2px solid var(--mike-orange);
+    transition: background .15s ease, color .15s ease;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__cta:hover,
+  #dt-mike-{{ section.id }} .dt-mike__cta:focus-visible {
+    background: transparent;
+    color: var(--mike-orange);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  #dt-mike-{{ section.id }} .dt-mike__cta:hover .dt-mike__arrow { transform: translateX(3px); }
+  #dt-mike-{{ section.id }} .dt-mike__arrow { display: inline-block; transition: transform .15s ease; }
+  #dt-mike-{{ section.id }} .dt-mike__foot { margin: 0; font-size: 13px; color: rgba(255,255,255,.5); }
+  #dt-mike-{{ section.id }} .dt-mike__panel {
+    display: grid;
+    justify-items: center;
+    gap: 22px;
+    padding: 28px 24px 24px;
+    background: #101317;
+    border: 1px solid rgba(255,255,255,.12);
+    border-left: 4px solid var(--mike-orange);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__orb {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 38%, #1a2026 0%, #0a0e12 70%);
+    box-shadow: 0 0 0 5px var(--mike-orange), 0 0 28px rgba(255,118,17,.35);
+    font-family: "Arial Black", Arial, sans-serif;
+    line-height: .82;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__d,
+  #dt-mike-{{ section.id }} .dt-mike__t { font-size: 42px; font-weight: 900; letter-spacing: -.08em; }
+  #dt-mike-{{ section.id }} .dt-mike__d { color: #fff; }
+  #dt-mike-{{ section.id }} .dt-mike__t { color: var(--mike-orange); }
+  #dt-mike-{{ section.id }} .dt-mike__mike {
+    flex: 0 0 100%;
+    margin-top: 4px;
+    text-align: center;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .28em;
+    color: var(--mike-cyan);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__steps {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+  #dt-mike-{{ section.id }} .dt-mike__steps li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 10px;
+    align-items: baseline;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,.1);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__steps li:first-child { border-top: 0; padding-top: 0; }
+  #dt-mike-{{ section.id }} .dt-mike__steps b {
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--mike-orange);
+  }
+  #dt-mike-{{ section.id }} .dt-mike__steps span {
+    font-size: 14px;
+    line-height: 1.35;
+    color: rgba(255,255,255,.82);
+  }
+  @media (max-width: 820px) {
+    #dt-mike-{{ section.id }}.dt-mike { padding: 40px 16px; }
+    #dt-mike-{{ section.id }} .dt-mike__inner { grid-template-columns: 1fr; gap: 24px; }
+    #dt-mike-{{ section.id }} .dt-mike__heading span { display: inline; }
+    #dt-mike-{{ section.id }} .dt-mike__actions { flex-direction: column; align-items: stretch; }
+    #dt-mike-{{ section.id }} .dt-mike__cta { width: 100%; }
+    #dt-mike-{{ section.id }} .dt-mike__foot { text-align: center; }
+    #dt-mike-{{ section.id }} .dt-mike__panel { padding: 20px 16px 16px; }
+    #dt-mike-{{ section.id }} .dt-mike__orb { width: 108px; height: 108px; }
+    #dt-mike-{{ section.id }} .dt-mike__d,
+    #dt-mike-{{ section.id }} .dt-mike__t { font-size: 34px; }
+  }
+  @media (max-width: 420px) {
+    #dt-mike-{{ section.id }} .dt-mike__steps li { grid-template-columns: 1fr; gap: 2px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #dt-mike-{{ section.id }} .dt-mike__cta,
+    #dt-mike-{{ section.id }} .dt-mike__arrow { transition: none; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Mike AI",
+  "tag": "div",
+  "class": "dt-mike-section",
+  "limit": 1,
+  "enabled_on": { "templates": ["index"] },
+  "settings": [
+    { "type": "header", "content": "Copy" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Also from Doer Tough" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Talk. Type." },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent", "default": " Get the next move." },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "Mike AI is the Doer Tough assistant. Voice or text — analyze a deal, find a flip, write it, or run the next money move. Same grit as the gear." },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Talk to Mike" },
+    { "type": "url", "id": "cta_url", "label": "Button link", "info": "Use https://doertoughmikeai.com" },
+    { "type": "checkbox", "id": "new_tab", "label": "Open in a new tab", "default": true },
+    { "type": "text", "id": "foot", "label": "Fine print", "default": "Free to start. Opens in a new tab." },
+    { "type": "header", "content": "Panel" },
+    { "type": "checkbox", "id": "show_orb", "label": "Show DT orb", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "bullet",
+      "name": "Bullet",
+      "settings": [{ "type": "text", "id": "text", "label": "Line" }]
+    },
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "text", "id": "text", "label": "Line" }
+      ]
+    }
+  ],
+  "max_blocks": 9,
+  "presets": [
+    {
+      "name": "Mike AI",
+      "category": "Apps",
+      "blocks": [
+        { "type": "bullet", "settings": { "text": "Analyze a used-item deal from a photo or a listing" } },
+        { "type": "bullet", "settings": { "text": "Find resale flips and what to offer" } },
+        { "type": "bullet", "settings": { "text": "Write, money, and the next move — by voice" } },
+        { "type": "step", "settings": { "title": "Talk", "text": "Tap the mic. Say the deal." } },
+        { "type": "step", "settings": { "title": "Type", "text": "Paste a listing or ask a question." } },
+        { "type": "step", "settings": { "title": "Move", "text": "Walk with a number, not a guess." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
